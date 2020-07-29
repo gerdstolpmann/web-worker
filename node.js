@@ -187,7 +187,8 @@ function workerThread() {
 				evaluateDataUrl(mod, name);
 			}
 			else {
-				global.require(mod);
+				let r = require;
+				r(mod);
 			}
 		}
 		catch (err) {
