@@ -17,9 +17,12 @@
 import URL from 'url';
 import VM from 'vm';
 import threads from 'worker_threads';
+import process from 'process';
 
 const WORKER = Symbol.for('worker');
 const EVENTS = Symbol.for('events');
+
+if (!threads.isMainThread && globalThis.workerStarted) process.exit();
 
 console.log("WORKER", threads.isMainThread);
 
