@@ -22,7 +22,10 @@ import process from 'process';
 const WORKER = Symbol.for('worker');
 const EVENTS = Symbol.for('events');
 
-if (!threads.isMainThread && globalThis.workerStarted) process.exit();
+if (!threads.isMainThread) {
+	if (globalThis.workerStarted) process.exit();
+	globalThis.workerStarted = true;
+}
 
 console.log("WORKER", threads.isMainThread);
 
