@@ -111,6 +111,7 @@ function mainThread() {
 				value: worker
 			});
 			worker.on('message', data => {
+				console.log("ONMESSAGE parent");
 				const event = new Event('message');
 				event.data = data;
 				this.dispatchEvent(event);
@@ -124,6 +125,7 @@ function mainThread() {
 			});
 		}
 		postMessage(data, transferList) {
+			console.log("POST parent");
 			this[WORKER].postMessage(data, transferList);
 		}
 		terminate() {
@@ -143,11 +145,13 @@ function workerThread() {
 	// enqueue messages to dispatch after modules are loaded
 	let q = [];
 	function flush() {
+		console.log("FLUSH");
 		const buffered = q;
 		q = null;
 		buffered.forEach(event => { self.dispatchEvent(event); });
 	}
 	threads.parentPort.on('message', data => {
+		console.log("ONMESSAGE child");
 		const event = new Event('message');
 		event.data = data;
 		if (q == null) self.dispatchEvent(event);
