@@ -28,6 +28,7 @@ class EventTarget {
 		});
 	}
 	dispatchEvent(event) {
+		console.log("DISPATCH");
 		event.target = event.currentTarget = this;
 		if (this['on'+event.type]) {
 			try {
@@ -38,6 +39,7 @@ class EventTarget {
 			}
 			return
 		}
+		console.log("DISPATCH2");
 		const list = this[EVENTS].get(event.type);
 		if (list == null) return;
 		list.forEach(handler => {
