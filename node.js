@@ -21,6 +21,8 @@ import threads from 'worker_threads';
 const WORKER = Symbol.for('worker');
 const EVENTS = Symbol.for('events');
 
+console.log("WORKER");
+
 class EventTarget {
 	constructor() {
 		Object.defineProperty(this, EVENTS, {
