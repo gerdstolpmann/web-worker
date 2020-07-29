@@ -187,7 +187,7 @@ function workerThread() {
 				evaluateDataUrl(mod, name);
 			}
 			else {
-				let r = require;
+				let r = eval("require");
 				r(mod);
 			}
 		}
