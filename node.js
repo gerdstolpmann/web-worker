@@ -36,6 +36,7 @@ class EventTarget {
 			catch (err) {
 				console.error(err);
 			}
+			return
 		}
 		const list = this[EVENTS].get(event.type);
 		if (list == null) return;
