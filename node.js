@@ -105,6 +105,7 @@ function mainThread() {
 			else {
 				mod = URL.fileURLToPath(new URL.URL(url, baseUrl));
 			}
+			console.log("CONSTRUCT");
 			const worker = new threads.Worker(
 				__filename,
 				{ workerData: { mod, name, type } }
