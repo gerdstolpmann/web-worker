@@ -21,7 +21,7 @@ import threads from 'worker_threads';
 const WORKER = Symbol.for('worker');
 const EVENTS = Symbol.for('events');
 
-console.log("WORKER");
+console.log("WORKER", threads.isMainThread);
 
 class EventTarget {
 	constructor() {
