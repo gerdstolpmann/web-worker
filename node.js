@@ -36,7 +36,7 @@ class EventTarget {
 		});
 	}
 	dispatchEvent(event) {
-		console.log("DISPATCH");
+	    console.log("DISPATCH", event.type);
 		event.target = event.currentTarget = this;
 		if (this['on'+event.type]) {
 			try {
