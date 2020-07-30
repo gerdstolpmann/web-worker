@@ -22,8 +22,6 @@ import process from 'process';
 const WORKER = Symbol.for('worker');
 const EVENTS = Symbol.for('events');
 
-console.log("WORKER", threads.isMainThread, threads.threadId);
-
 class EventTarget {
 	constructor() {
 		Object.defineProperty(this, EVENTS, {
@@ -31,7 +29,6 @@ class EventTarget {
 		});
 	}
 	dispatchEvent(event) {
-	    console.log("DISPATCH", event.type);
 		event.target = event.currentTarget = this;
 		if (this['on'+event.type]) {
 			try {
@@ -42,7 +39,6 @@ class EventTarget {
 			}
 			return
 		}
-		console.log("DISPATCH2");
 		const list = this[EVENTS].get(event.type);
 		if (list == null) return;
 		list.forEach(handler => {
@@ -106,7 +102,6 @@ function mainThread() {
 			else {
 				mod = URL.fileURLToPath(new URL.URL(url, baseUrl));
 			}
-			console.log("CONSTRUCT");
 			const worker = new threads.Worker(
 				__filename,
 				{ workerData: { mod, name, type } }
@@ -115,7 +110,6 @@ function mainThread() {
 				value: worker
 			});
 			worker.on('message', data => {
-				console.log("ONMESSAGE parent");
 				const event = new Event('message');
 				event.data = data;
 				this.dispatchEvent(event);
@@ -129,7 +123,6 @@ function mainThread() {
 			});
 		}
 		postMessage(data, transferList) {
-			console.log("POST parent");
 			this[WORKER].postMessage(data, transferList);
 		}
 		terminate() {
@@ -141,7 +134,6 @@ function mainThread() {
 }
 
 function workerThread() {
-    console.log("workerThread", threads.workerData);
 	let { mod, name, type } = threads.workerData;
 
 	// turn global into a mock WorkerGlobalScope
@@ -150,13 +142,11 @@ function workerThread() {
 	// enqueue messages to dispatch after modules are loaded
 	let q = [];
 	function flush() {
-		console.log("FLUSH");
 		const buffered = q;
 		q = null;
 		buffered.forEach(event => { self.dispatchEvent(event); });
 	}
 	threads.parentPort.on('message', data => {
-		console.log("ONMESSAGE child");
 		const event = new Event('message');
 		event.data = data;
 		if (q == null) self.dispatchEvent(event);
@@ -199,8 +189,7 @@ function workerThread() {
 				evaluateDataUrl(mod, name);
 			}
 			else {
-				let r = require;
-				r(mod);
+				require(mod);
 			}
 		}
 		catch (err) {
